@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import thunk from 'redux-thunk';
-import {composeWithDevTools} from 'redux-devtools-extension';
+import { composeWithDevTools } from '@redux-devtools/extension';
 import reducers from './reducers';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -20,8 +20,9 @@ const deps = {history, categoryApi};
 const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk.withExtraArgument(deps))));
 store.dispatch(fetchCategories());
 store.dispatch(fetchProducts());
-
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container); 
+root.render(
     <div className="content">
         <div className="container">
             <Provider store={store}>
@@ -30,6 +31,5 @@ ReactDOM.render(
                 </Router>
             </Provider>
         </div>
-    </div>,
-    document.getElementById('root')
+    </div>
 );
