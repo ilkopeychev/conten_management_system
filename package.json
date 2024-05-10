@@ -12,11 +12,12 @@
     "node": ">=16"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-redux": "7.2.9",
     "react-router-dom": "5.3.4",
-    "reactstrap": "8.10.1",
+    "reactstrap": "9.2.2",
     "redux": "4.2.1",
     "redux-thunk": "2.4.2"
   },
@@ -24,7 +25,6 @@
     "@babel/preset-env": "7.23.9",
     "@testing-library/react": "14.2.1",
     "@vitejs/plugin-react": "4.2.1",
-    "@redux-devtools/extension": "^3.3.0",
     "babel-jest": "29.7.0",
     "bootstrap": "4.6.2",
     "dayjs": "1.11.10",
