@@ -1,42 +1,41 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import {applyMiddleware} from 'redux';
-import { configureStore } from '@reduxjs/toolkit';
-import {Provider} from 'react-redux';
-import thunk from 'redux-thunk';
-import {App} from './App';
-import {fetchCategories} from './actions/categories';
-import {fetchProducts} from './actions/products';
-import {createHashHistory} from 'history';
-import {Router} from 'react-router-dom';
-import {categoryApi} from './gateways/CategoryApi';
-import rootReducer from './reducers';
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from "react";
+import { HashRouter as Router } from "react-router-dom";
+import { createRoot } from "react-dom/client";
+import { configureStore } from "@reduxjs/toolkit";
+import { createHashHistory } from "history";
+import { categoryApi } from "./gateways/CategoryApi";
+import { productApi } from "./gateways/ProductApi";
+import { Provider } from "react-redux";
+import { App } from "./App";
+import rootReducer from "./reducers";
+import "./index.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 const history = createHashHistory();
 
-const deps = {history, categoryApi};
-  console.log(categoryApi,"categoryApi");
+const deps = { history, categoryApi, productApi };
+
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(thunk.withExtraArgument(deps)),
-  devTools: process.env.NODE_ENV !== 'production', // Automatically uses composeWithDevTools if true
+    getDefaultMiddleware({
+      thunk: {
+        extraArgument: deps,
+      },
+      serializableCheck: false,
+    }),
 });
 
-console.log(deps,"deps")
-store.dispatch(fetchCategories());
-store.dispatch(fetchProducts());
-const container = document.getElementById('root');
-const root = createRoot(container); 
+const container = document.getElementById("root");
+const root = createRoot(container);
+
 root.render(
-    <div className="content">
-        <div className="container">
-            <Provider store={store}>
-                <Router history={history}>
-                    <App/>
-                </Router>
-            </Provider>
-        </div>
+  <div className="content">
+    <div className="container">
+      <Provider store={store}>
+        <Router>
+          <App />
+        </Router>
+      </Provider>
     </div>
+  </div>
 );

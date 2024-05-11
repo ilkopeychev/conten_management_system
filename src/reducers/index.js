@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import {categories} from './categories';
-import {products} from './products';
+import categoriesReducer from './categoriesSlice';
+import productsReducer from './productsSlice'; // Update to the new slice reducer
 
 export default combineReducers({
-    categories,
-    products,
+    categories: categoriesReducer,
+    products: productsReducer,
 });

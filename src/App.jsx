@@ -1,21 +1,36 @@
-import React from 'react'
-import {Route, Switch} from 'react-router-dom'
-import {Main} from './components/Main/Main'
-import ProductsContainer from './components/Products/ProductsContainer'
-import NotFound from './components/NotFound/NotFound'
-import UpdateFormContainer from './components/Products/Update/UpdateFormContainer';
-import AddFormContainer from './components/Products/Add/AddFormContainer';
+import React, { useEffect } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
+import { Main } from "./components/Main/Main";
+import ProductsContainer from "./components/Products/ProductsContainer";
+import NotFound from "./components/NotFound/NotFound";
+import UpdateFormContainer from "./components/Products/Update/UpdateFormContainer";
+import AddFormContainer from "./components/Products/Add/AddFormContainer";
+import { useDispatch } from "react-redux";
+import { fetchProducts } from "./reducers/productsSlice";
+import { fetchCategories } from "./reducers/categoriesSlice";
 
-export const App = () => (
+export const App = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+    dispatch(fetchCategories());
+  }, [dispatch]);
+
+  return (
     <Main>
-        <Switch>
-            <Route exact path="/" component={ProductsContainer}/>,
-            <Route
-                path="/edit/:productId"
-                render={({match}) => (<UpdateFormContainer productId={parseInt(match.params.productId)}/>)}
-            />,
-            <Route path="/add" component={AddFormContainer}/>,
-            <Route path="*" component={NotFound}/>,
-        </Switch>
+      <Switch>
+        <Route exact path="/" component={ProductsContainer} />
+        <Route
+          path="/edit/:productId"
+          render={({ match }) => (
+            <UpdateFormContainer productId={parseInt(match.params.productId)} />
+          )}
+        />
+        <Route path="/add" component={AddFormContainer} />
+        <Route path="*" component={NotFound} />
+      </Switch>
     </Main>
-);
+  );
+};

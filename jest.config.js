@@ -7,7 +7,7 @@
 const config = {
   // All imported modules in your tests should be mocked automatically
   // automock: false,
-
+  silent: false,
   // Stop running tests after `n` failures
   // bail: 0,
 
@@ -175,7 +175,7 @@ const config = {
 
   // A map from regular expressions to paths to transformers
   transform: {
-      '^.+\\.(js|jsx)$': 'babel-jest',
+    "^.+\\.(js|jsx)$": "babel-jest",
   },
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
@@ -188,7 +188,7 @@ const config = {
   // unmockedModulePathPatterns: undefined,
 
   // Indicates whether each individual test should be reported during the run
-  // verbose: undefined,
+  verbose: true,
 
   // An array of regexp patterns that are matched against all source file paths before re-running tests in watch mode
   // watchPathIgnorePatterns: [],
