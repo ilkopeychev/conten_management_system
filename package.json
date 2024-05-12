@@ -9,7 +9,18 @@
     "test": "jest"
   },
   "engines": {
-    "node": "16"
+    "node": ">=16"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.2.4",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "7.2.9",
+    "react-router-dom": "5.3.4",
+    "reactstrap": "9.2.2",
+    "redux": "4.2.1",
+    "redux-thunk": "2.4.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "7.23.9",
@@ -23,14 +34,6 @@
     "jest-environment-jsdom": "29.7.0",
     "lodash": "4.17.21",
     "prop-types": "15.8.1",
-    "react": "16.14.0",
-    "react-dom": "16.14.0",
-    "react-redux": "7.2.9",
-    "react-router-dom": "5.3.4",
-    "reactstrap": "8.10.1",
-    "redux": "4.2.1",
-    "redux-devtools-extension": "2.13.9",
-    "redux-thunk": "2.4.2",
     "vite": "5.1.4"
   },
   "browserslist": {

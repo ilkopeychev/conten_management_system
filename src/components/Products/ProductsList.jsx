@@ -1,30 +1,45 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Product from './Product';
-import {Container, Row, Col} from 'reactstrap'
-import {chunk} from 'lodash'
+import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import Product from "./Product";
+import { Container, Row, Col } from "reactstrap";
+import { chunk } from "lodash";
+import { deleteProduct } from "../../reducers/productsSlice";
+import { getCategoriesById } from "../../reducers/categoriesSlice";
 
-const ProductList = ({products, onDelete}) => {
-    const productsGroups = chunk(products, 3)
+const ProductList = () => {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => {
+  
+    const categoriesById = getCategoriesById(state);
+    return state.products.products.map((product) => ({
+      ...product,
+      categories: product.categories.map(
+        (id) => categoriesById[id] || { id, name: "Unknown" }
+      ),
+    }));
+  });
+  const handleDelete = (id) => {
+    dispatch(deleteProduct(id));
+  };
 
-    return (
-        <Container>
-            {productsGroups.map((productsGroup, index) => (
-                <Row key={index} className="mb-5">
-                    {productsGroup.map(product => (
-                        <Col sm="4" key={product.id}>
-                            <Product product={product} onDelete={onDelete}/>
-                        </Col>
-                    ))}
-                </Row>
-            ))}
-        </Container>
-    );
-};
+  const productsGroups = chunk(products, 3);
 
-ProductList.propTypes = {
-    products: PropTypes.array.isRequired,
-    onDelete: PropTypes.func.isRequired,
+  return (
+    <Container>
+      {productsGroups.map((productsGroup, index) => (
+        <Row key={index} className="mb-5">
+          {productsGroup.map((product) => (
+            <Col sm="4" key={product.id}>
+              <Product
+                product={product}
+                onDelete={() => handleDelete(product.id)}
+              />
+            </Col>
+          ))}
+        </Row>
+      ))}
+    </Container>
+  );
 };
 
 export default ProductList;

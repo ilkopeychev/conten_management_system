@@ -1,13 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
 export const repeat = (n) => Array.from(Array(n).keys());
-
-export function getMultiSelected(target) {
-    return Array.from(target.options).reduce((acc, {selected, value}) => {
-        if (selected) {
-            acc.push(value)
-        }
-        return acc;
-    }, [])
-}
 
 const SEC = 1000;
 const MIN = 60 * SEC;
@@ -19,5 +11,5 @@ export function timestampToDays(ms) {
 }
 
 export function generateId() {
-    return Date.now().toString(10);
+    return parseInt(uuidv4()); 
 }
