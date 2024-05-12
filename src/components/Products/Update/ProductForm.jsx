@@ -93,7 +93,7 @@ export const ProductForm = ({ product }) => {
       return;
     }
 
-    if (!product && !isValidExpirationDate(formState.expirationDate)) {
+    if (!product && !isValidExpirationDate(formState.expirationDate) && formState.expirationDate!=="") {
       alert("The expiration date must be at least 30 days in the future.");
       return;
     }
