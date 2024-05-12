@@ -70,4 +70,4 @@ export const { deleteProduct, updateProduct, createProduct } = productsSlice.act
 export default productsSlice.reducer;
 
 // Selectors
-export const getProductById = (state, productId) => state.products.find(product => product.id === productId);
+export const getProductById = (state, productId) => state.products.products.find(product => product.id === productId);

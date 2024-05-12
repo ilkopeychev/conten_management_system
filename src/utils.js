@@ -1,14 +1,5 @@
 export const repeat = (n) => Array.from(Array(n).keys());
 
-export function getMultiSelected(target) {
-    return Array.from(target.options).reduce((acc, {selected, value}) => {
-        if (selected) {
-            acc.push(value)
-        }
-        return acc;
-    }, [])
-}
-
 const SEC = 1000;
 const MIN = 60 * SEC;
 const HOUR = 60 * MIN;
@@ -21,3 +12,10 @@ export function timestampToDays(ms) {
 export function generateId() {
     return Date.now().toString(10);
 }
+
+export const isValidExpirationDate = (date) => {
+    const today = new Date();
+    const futureDate = new Date(date);
+    const daysDifference = (futureDate - today) / (1000 * 60 * 60 * 24); // Convert from ms to days
+    return daysDifference >= 30;
+  };

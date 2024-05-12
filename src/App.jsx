@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
 import { Route, Switch } from "react-router-dom";
 import { Main } from "./components/Main/Main";
 import ProductsContainer from "./components/Products/ProductsContainer";
@@ -24,10 +23,16 @@ export const App = () => {
         <Route exact path="/" component={ProductsContainer} />
         <Route
           path="/edit/:productId"
-          render={({ match }) => (
-            <UpdateFormContainer productId={parseInt(match.params.productId)} />
-          )}
+          render={({ match }) => {
+            console.log(match.params.productId); // Check what match object contains
+            return (
+              <UpdateFormContainer
+                productId={parseInt(match.params.productId, 10)}
+              />
+            );
+          }}
         />
+
         <Route path="/add" component={AddFormContainer} />
         <Route path="*" component={NotFound} />
       </Switch>

@@ -9,6 +9,7 @@ import { getCategoriesById } from "../../reducers/categoriesSlice";
 const ProductList = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => {
+  
     const categoriesById = getCategoriesById(state);
     return state.products.products.map((product) => ({
       ...product,
@@ -17,7 +18,6 @@ const ProductList = () => {
       ),
     }));
   });
-
   const handleDelete = (id) => {
     dispatch(deleteProduct(id));
   };

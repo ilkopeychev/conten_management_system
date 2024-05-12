@@ -11,7 +11,7 @@ const Product = ({product, onDelete}) => {
     const receiptDate = product.receiptDate ? dayjs(product.receiptDate).format(shortDateFormat) : '-';
     const expirationDate = product.expirationDate ? dayjs(product.expirationDate).format(shortDateFormat) : '-';
     const createdAt = product.createdAt ? dayjs(product.createdAt).format(longDateFormat) : '-';
-
+    console.log("productID",product.id)
     return (
         <Card>
             <CardBody>
