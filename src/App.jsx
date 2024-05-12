@@ -15,7 +15,7 @@ export const App = () => {
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
-  }, [dispatch]);
+  }, []);
 
   return (
     <Main>
@@ -24,7 +24,6 @@ export const App = () => {
         <Route
           path="/edit/:productId"
           render={({ match }) => {
-            console.log(match.params.productId); // Check what match object contains
             return (
               <UpdateFormContainer
                 productId={parseInt(match.params.productId, 10)}

@@ -19,7 +19,8 @@
     "react-router-dom": "5.3.4",
     "reactstrap": "9.2.2",
     "redux": "4.2.1",
-    "redux-thunk": "2.4.2"
+    "redux-thunk": "2.4.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@babel/preset-env": "7.23.9",

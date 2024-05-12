@@ -9,52 +9,71 @@ import {
   Label,
 } from "reactstrap";
 import { useSelector, useDispatch } from "react-redux";
-import { repeat, isValidExpirationDate } from "../../../utils";
+import { repeat } from "../../../utils";
+import { createProduct, updateProduct } from "../../../reducers/productsSlice";
 import { fetchCategories } from "../../../reducers/categoriesSlice";
-import { createProduct } from "../../../reducers/productsSlice";
-import { isCategoriesValid, isNameValid } from "./validators";
+import {
+  isCategoriesValid,
+  isNameValid,
+  isValidExpirationDate,
+} from "./validators";
+import { useHistory } from "react-router-dom";
 
-export const ProductForm = ({ product = {} }) => {
+export const ProductForm = ({ product }) => {
   const dispatch = useDispatch();
   const categoriesStore = useSelector((state) => state.categories.categories);
-
+  const navigate = useHistory();
   // Initialize the form state with product data or default values
   const [formState, setFormState] = useState({
-    name: product.name || "",
-    brand: product.brand || "",
-    rating: product.rating || 0,
+    name: "",
+    brand: "",
+    rating: 0,
     categories: [],
-    itemsInStock: product.itemsInStock || 0,
-    receiptDate: product.receiptDate || "",
-    expirationDate: product.expirationDate || "",
-    featured: product.featured || false,
+    itemsInStock: 0,
+    receiptDate: "",
+    expirationDate: "",
+    featured: false,
   });
 
+  useEffect(() => {
+    if (product) {
+      setFormState({
+        name: product.name || "",
+        brand: product.brand || "",
+        rating: product.rating || 0,
+        categories: product.categories.map((cat) => cat.toString()) || [],
+        itemsInStock: product.itemsInStock || 0,
+        receiptDate: product.receiptDate || "",
+        expirationDate: product.expirationDate || "",
+        featured: product.featured || false,
+      });
+    }
+  }, [product]);
   const selectedCategoryNames = categoriesStore
     .filter((cat) => formState.categories.includes(cat.id.toString())) // Ensure the IDs are compared correctly
     .map((cat) => cat.name)
     .join(", ");
 
-  // Fetch categories if not already loaded
   useEffect(() => {
     if (categoriesStore.length === 0) {
       dispatch(fetchCategories());
     }
   }, [dispatch, categoriesStore.length]);
 
-  // Handle input changes for all form fields
   const handleInputChange = (event) => {
     const { name, value, type, checked, options } = event.target;
     if (type === "checkbox") {
       setFormState((prevState) => ({ ...prevState, [name]: checked }));
     } else if (type === "select-multiple") {
-      const selectedValues = Array.from(options) // Convert HTMLOptionsCollection to Array
-        .filter((option) => option.selected) // Filter for selected options
-        .map((option) => option.value); // Map to their values
-        if (selectedValues.length > 5) {
-          alert("You can select up to 5 categories only.");  // Inform the user
-          return; // Stop the function and do not update state
-        }
+      const selectedValues = Array.from(options)
+        .filter((option) => option.selected)
+        .map((option) => option.value);
+
+      if (selectedValues.length > 5) {
+        alert("You can select up to 5 categories only.");
+        return;
+      }
+
       setFormState((prevState) => ({
         ...prevState,
         [name]: selectedValues,
@@ -64,24 +83,31 @@ export const ProductForm = ({ product = {} }) => {
     }
   };
 
-  // Handle form submission
-  const onSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (!isNameValid) {
-      alert("invalid name");
+    if (
+      !isNameValid(formState.name) ||
+      !isCategoriesValid(formState.categories)
+    ) {
+      alert("Please correct the errors before submitting.");
+      return;
     }
-    if (!isCategoriesValid) {
-      alert("please select 1 or more categories");
-    }
-    if (!isValidExpirationDate(formState.expirationDate)) {
+
+    if (!product && !isValidExpirationDate(formState.expirationDate)) {
       alert("The expiration date must be at least 30 days in the future.");
       return;
     }
-    dispatch(createProduct(formState));
+    if (product) {
+      const data = { ...formState };
+      dispatch(updateProduct({ id: product.id, data }));
+    } else {
+      dispatch(createProduct(formState));
+    }
+    navigate.push("/");
   };
 
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={handleSubmit}>
       <FormGroup>
         <Label for="name">Name</Label>
         <Input
@@ -94,7 +120,8 @@ export const ProductForm = ({ product = {} }) => {
           onChange={handleInputChange}
         />
         <FormFeedback>
-          Name is required, the length must not be greater than 200
+          Name is required, and the length must not be greater than 200
+          characters.
         </FormFeedback>
       </FormGroup>
 
@@ -145,8 +172,8 @@ export const ProductForm = ({ product = {} }) => {
             </option>
           ))}
         </Input>
-        <FormFeedback>A product must have from 1 to 5 categories</FormFeedback>
-        <p>Selected Categories: {selectedCategoryNames || "None"}</p>
+        <FormFeedback>A product must have from 1 to 5 categories.</FormFeedback>
+        <p>Selected Categories: {selectedCategoryNames || "None"}</p>{" "}
       </FormGroup>
 
       <FormGroup>
@@ -180,6 +207,7 @@ export const ProductForm = ({ product = {} }) => {
           value={formState.expirationDate}
           onChange={handleInputChange}
           invalid={
+            !product &&
             !isValidExpirationDate(formState.expirationDate) &&
             formState.expirationDate !== ""
           }
